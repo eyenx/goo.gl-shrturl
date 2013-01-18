@@ -5,30 +5,26 @@
 # mods
 
 import sys
-import os
-import subprocess
-import json
+import subprocess as sub
+import json as js
+import urllib.request as ureq
+#helper
+if len(sys.argv)<2:
+    print("\nno arguments found. you must provide a url!\n")
+    sys.exit(1)
 
 # vars
-
-
-
 longurl = sys.argv[1]
 key = 'AIzaSyDt3n_utWwGWprFFdMysqPIiMOvX9W5X88'
 domain = 'https://www.googleapis.com/urlshortener/v1/url?key='
-cmd = 'curl -s '+domain+key+' -H \'Content-Type: application/json\' -d \'{"longUrl":"'+longurl+'"}\''
-
-
 # main
-
-response = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE)
-response = response.communicate()[0].decode()
-#print(type(response))
-#print(response)
-index=json.loads(response)
-shorturl=index["id"]
+data='{"longUrl":"'+longurl+'"}'
+req=ureq.Request(domain+key,data.encode('utf-8'),{"Content-Type" : "application/json"})
+#get response and load json
+resp=js.loads(ureq.urlopen(req).read().decode('utf-8'))
+shrtrl=resp["id"]
 print('Here you go, it was xclipped...')
-print('\nURL:\t'+shorturl+'\n')
-echo=subprocess.Popen(['echo',shorturl],stdin=subprocess.PIPE,stdout=subprocess.PIPE)
-#xclip=subprocess.Popen(['xclip','-i','-se','c'],stdin=echo.stdout,stdout=subprocess.PIPE)
-xclip=subprocess.Popen(['xclip','-i'],stdin=echo.stdout,stdout=subprocess.PIPE)
+print('\nURL:\t'+shrtrl+'\n')
+echo=sub.Popen(['echo',shrtrl],stdin=sub.PIPE,stdout=sub.PIPE)
+#xclip=sub.Popen(['xclip','-i','-se','c'],stdin=echo.stdout,stdout=sub.PIPE)
+xclip=sub.Popen(['xclip','-i'],stdin=echo.stdout)
