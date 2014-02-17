@@ -14,7 +14,7 @@ def helper():
         print("\nno arguments found. you must provide a url!\n")
         sys.exit(1)
 
-def main():
+if __name__=='__main__':
     helper()
     # vars
     longurl = sys.argv[1]
@@ -31,6 +31,3 @@ def main():
     echo=sub.Popen(['echo',shrtrl],stdin=sub.PIPE,stdout=sub.PIPE)
     #xclip=sub.Popen(['xclip','-i','-se','c'],stdin=echo.stdout,stdout=sub.PIPE)
     xclip=sub.Popen(['xclip','-i'],stdin=echo.stdout)
-
-if __name__=='__main__':
-    main()
